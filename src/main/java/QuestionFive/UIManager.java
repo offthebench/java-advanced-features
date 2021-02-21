@@ -1,5 +1,12 @@
 package QuestionFive;
 
+import reader.Reader;
+import reader.ReaderFactory;
+import reader.ReaderType;
+import writer.Writer;
+import writer.WriterFactory;
+import writer.WriterType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -17,11 +24,8 @@ public class UIManager {
     }
 
     void initializeUI() {
-        System.out.println("1. Draw Horizontal Line");
-        System.out.println("2. Draw Vertical Line");
-        System.out.println("3. Draw Infinite Square");
-        System.out.println("4. Exit");
-
+        Writer writer = WriterFactory.getInstance().getWriter(WriterType.CONSOLE);
+        writer.write("1. Draw Horizontal Line \n2. Draw Vertical Line \n3. Draw Infinite Square \n4. Exit");
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
 
@@ -53,20 +57,20 @@ public class UIManager {
     }
 
     void drawSquare() {
+        Reader reader = ReaderFactory.getInstance().getReader();
         int rows = characterList.size();
         int col = characterList.size();
         drawSquare(rows, col);
 
         boolean exit = false;
         do {
-            Scanner scanner = new Scanner(System.in);
             System.out.println("1. Add Row");
             System.out.println("2. Add Column");
             System.out.println("3. Delete Row");
             System.out.println("4. Delete Column");
             System.out.println("5. Exit");
 
-            int choice = scanner.nextInt();
+            int choice = Integer.parseInt(reader.read());
             switch (choice) {
                 case 1:
                     drawSquare(++rows, col);
@@ -91,11 +95,15 @@ public class UIManager {
     }
 
     private void drawSquare(int row, int col) {
+        Writer writer = WriterFactory.getInstance().getWriter(WriterType.FILE);
+        String output = "";
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                System.out.print(CHARACTER + "  ");
+                output += CHARACTER + "  ";
             }
-            System.out.println();
+            output += " \n";
         }
+
+        writer.write(output);
     }
 }
